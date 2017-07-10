@@ -8,7 +8,7 @@ Name:           openstack-keystone
 # https://review.openstack.org/#/q/I6a35fa0dda798fad93b804d00a46af80f08d475c,n,z
 Epoch:          1
 Version:        11.0.3
-Release:        1%{?dist}
+Release:        1.1%{?dist}
 Summary:        OpenStack Identity Service
 License:        ASL 2.0
 URL:            http://keystone.openstack.org/
@@ -17,6 +17,8 @@ Source1:        openstack-keystone.logrotate
 Source3:        openstack-keystone.sysctl
 Source5:        openstack-keystone-sample-data
 Source20:       keystone-dist.conf
+
+Patch00001:     0001-Support-LDAP-hashed-passwords.patch
 
 BuildArch:      noarch
 BuildRequires:  openstack-macros
@@ -145,6 +147,8 @@ This package contains documentation for Keystone.
 
 %prep
 %setup -q -n keystone-%{upstream_version}
+
+%patch0001 -p1
 
 find . \( -name .gitignore -o -name .placeholder \) -delete
 find keystone -name \*.py -exec sed -i '/\/usr\/bin\/env python/d' {} \;
@@ -281,6 +285,9 @@ chmod 660 %{_localstatedir}/log/keystone/keystone.log
 %endif
 
 %changelog
+* Mon Oct 23 2017 Pierre Riteau <priteau@uchicago.edu> 1:11.0.3-1.1
+- Add Chameleon patch
+
 * Wed Jul 26 2017 rdo-trunk <javier.pena@redhat.com> 1:11.0.3-1
 - Update to 11.0.3
 
